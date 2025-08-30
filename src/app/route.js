@@ -1,12 +1,13 @@
+// src/app/route.ts  (или .js)
 import { getCloudflareContext } from '@opennextjs/cloudflare';
-export const runtime = 'edge';
+import type { R2Bucket } from '@cloudflare/workers-types';
 
-export async function POST(req) {
+export async function POST(req: Request) {
   const { env } = getCloudflareContext();
-  const bucket = env.BUCKET;
+  const bucket = env.BUCKET as R2Bucket;
 
   const form = await req.formData();
-  const file = form.get('file');
+  const file = form.get('file') as File | null;
   if (!file) return new Response('No file', { status: 400 });
 
   const type = file.type || 'application/octet-stream';
