@@ -51,7 +51,10 @@ export default {
     const key = `passports/${Date.now()}-${crypto.randomUUID()}.${ext}`;
     await env.BUCKET.put(key, await file.arrayBuffer(), { httpMetadata: { contentType: type } });
 
-    const fileUrl = `${url.origin}/file/${encodeURIComponent(key)}`;
+// корректно с учётом mount path, например /upload
+const base = url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname;
+const fileUrl = `${url.origin}${base}/file/${encodeURIComponent(key)}`;
+
     return new Response(JSON.stringify({ url: fileUrl, name: file.name || key }), {
       status: 200, headers: { ...cors, 'Content-Type': 'application/json' }
     });
