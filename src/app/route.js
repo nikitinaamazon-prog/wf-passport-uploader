@@ -18,7 +18,7 @@ export async function POST(req) {
   await bucket.put(key, await file.arrayBuffer(), { httpMetadata: { contentType: type } });
 
   const url = new URL(req.url);
-  const base = url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname;
+  const base = url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname; // /upload
   const fileUrl = `${url.origin}${base}/file/${encodeURIComponent(key)}`;
 
   return Response.json({ url: fileUrl, name: file.name ?? key });
