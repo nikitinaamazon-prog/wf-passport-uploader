@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "wf-passport-uploader",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-01",
+  "assets": { "binding": "ASSETS", "directory": ".open-next/assets" },
+  "r2_buckets": [
+    { "binding": "BUCKET", "bucket_name": "passports" }
+  ]
+}
