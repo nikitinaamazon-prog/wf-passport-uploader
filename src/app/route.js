@@ -1,18 +1,18 @@
-// src/app/route.ts  (или .js)
 import { getCloudflareContext } from '@opennextjs/cloudflare';
-import type { R2Bucket } from '@cloudflare/workers-types';
 
-export async function POST(req: Request) {
+export async function POST(req) {
   const { env } = getCloudflareContext();
-  const bucket = env.BUCKET as R2Bucket;
+  const bucket = env.BUCKET;
 
   const form = await req.formData();
-  const file = form.get('file') as File | null;
+  const file = form.get('file');
   if (!file) return new Response('No file', { status: 400 });
 
   const type = file.type || 'application/octet-stream';
-  if (!(type.startsWith('image/') || type === 'application/pdf')) return new Response('Unsupported type', { status: 415 });
-  if (file.size > 10 * 1024 * 1024) return new Response('File too large', { status: 413 });
+  if (!(type.startsWith('image/') || type === 'application/pdf')))
+    return new Response('Unsupported type', { status: 415 });
+  if (file.size > 10 * 1024 * 1024)
+    return new Response('File too large', { status: 413 });
 
   const ext = (file.name?.split('.').pop() || 'bin').toLowerCase();
   const key = `passports/${Date.now()}-${crypto.randomUUID()}.${ext}`;
