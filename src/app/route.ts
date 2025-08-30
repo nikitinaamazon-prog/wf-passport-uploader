@@ -11,10 +11,8 @@ export async function POST(req: Request) {
   if (!file) return new Response('No file', { status: 400 });
 
   const type = file.type || 'application/octet-stream';
-  if (!(type.startsWith('image/') || type === 'application/pdf'))
-    return new Response('Unsupported type', { status: 415 });
-  if (file.size > 10 * 1024 * 1024)
-    return new Response('File too large', { status: 413 });
+  if (!(type.startsWith('image/') || type === 'application/pdf')) return new Response('Unsupported type', { status: 415 });
+  if (file.size > 10 * 1024 * 1024) return new Response('File too large', { status: 413 });
 
   const ext = (file.name?.split('.').pop() || 'bin').toLowerCase();
   const key = `passports/${Date.now()}-${crypto.randomUUID()}.${ext}`;
