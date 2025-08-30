@@ -1,10 +1,9 @@
 import { getCloudflareContext } from '@opennextjs/cloudflare';
-import type { R2Bucket } from '@cloudflare/workers-types';
 export const runtime = 'edge';
 
-export async function GET(_req: Request, ctx: { params: { key: string[] } }) {
+export async function GET(_req, ctx) {
   const { env } = getCloudflareContext();
-  const bucket = env.BUCKET as R2Bucket;
+  const bucket = env.BUCKET;
 
   const key = ctx.params.key.join('/');
   const obj = await bucket.get(key);
