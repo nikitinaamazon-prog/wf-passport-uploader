@@ -1,3 +1,11 @@
+// ВРЕМЕННАЯ диагностика: GET /upload -> 200 OK
+export async function GET() {
+  return new Response('OK: /upload is wired', {
+    status: 200,
+    headers: { 'content-type': 'text/plain; charset=utf-8' },
+  });
+}
+
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 export async function POST(req) {
