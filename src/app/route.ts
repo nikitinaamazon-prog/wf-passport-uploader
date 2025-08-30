@@ -1,13 +1,12 @@
 import { getCloudflareContext } from '@opennextjs/cloudflare';
-import type { R2Bucket } from '@cloudflare/workers-types';
 export const runtime = 'edge';
 
-export async function POST(req: Request) {
+export async function POST(req) {
   const { env } = getCloudflareContext();
-  const bucket = env.BUCKET as R2Bucket;
+  const bucket = env.BUCKET;
 
   const form = await req.formData();
-  const file = form.get('file') as File | null;
+  const file = form.get('file');
   if (!file) return new Response('No file', { status: 400 });
 
   const type = file.type || 'application/octet-stream';
@@ -19,7 +18,7 @@ export async function POST(req: Request) {
   await bucket.put(key, await file.arrayBuffer(), { httpMetadata: { contentType: type } });
 
   const url = new URL(req.url);
-  const base = url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname; // /upload
+  const base = url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname;
   const fileUrl = `${url.origin}${base}/file/${encodeURIComponent(key)}`;
 
   return Response.json({ url: fileUrl, name: file.name ?? key });
